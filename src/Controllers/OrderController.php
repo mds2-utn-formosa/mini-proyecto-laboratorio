@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ============================================================================
  *  CONTROLADOR DE PEDIDOS
@@ -39,9 +40,8 @@ class OrderController
         $total = $tipo === 'obra_social' ? $monto * 0.7 : $monto;
 
         // ❌ 3. SQL dentro del controlador (deberia ser Repository)
-        $conexion = Connection::obtener();
+        $conexion = Connection::getInstance();
         $conexion->ejecutar("INSERT INTO orders VALUES ({$id}, '{$paciente}', {$total})");
-
         // ❌ 4. Notificacion resuelta otra vez con if (deberia ser Factory)
         $notificador = new NotificationSender();
         $notificador->enviar('email', 'paciente@mail.com', "Pedido {$id} creado");
