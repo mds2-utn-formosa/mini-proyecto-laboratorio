@@ -2,30 +2,27 @@
 /**
  * ============================================================================
  *  NOTIFICACION POR EMAIL
+ *  Patron aplicado: FACTORY METHOD (creacional)
  * ============================================================================
  *
- *  ❌ DEUDA SEMBRADA
- *     Esta clase NO implementa ninguna interfaz.
- *     Quien la usa depende de la clase concreta => acoplamiento fuerte.
- *     El metodo se llama enviarEmail(); el de SMS se llama mandarSms().
- *     Nombres distintos para la misma responsabilidad: imposible intercambiarlos.
- *
- *  ✅ FORMA CORRECTA
- *     interface Notification { public function send(string $message): void; }
- *     class EmailNotification implements Notification { public function send(...) }
- *     Mismo contrato => polimorfismo => el cliente no conoce la clase concreta.
+ *  ✅ Implementa Notification::send() para compartir contrato con SMS.
+ *  ✅ Se crea solo a través de NotificationFactory.
  * ============================================================================
  */
 
-class EmailNotification
+interface Notification
 {
-    /**
-     * ❌ METODO MAL APLICADO: enviarEmail()
-     *    El nombre y la firma son propios de esta clase.
-     *    ✅ Deberia llamarse send(string $message): void, definido por la interfaz.
-     */
-    public function enviarEmail(string $destinatario, string $asunto, string $cuerpo): void
+    public function send(string $message): void;
+}
+
+class EmailNotification implements Notification
+{
+    public function __construct(private string $destinatario)
     {
-        echo "[EMAIL] para {$destinatario} | {$asunto}: {$cuerpo}<br>";
+    }
+
+    public function send(string $message): void
+    {
+        echo "[EMAIL] para {$this->destinatario} | Pedido del laboratorio: {$message}<br>";
     }
 }
