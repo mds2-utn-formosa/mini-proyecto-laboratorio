@@ -22,7 +22,6 @@
 // ❌ MAL APLICADO: carga manual. Cada clase nueva obliga a editar este archivo.
 require_once __DIR__ . '/../src/Database/Connection.php';
 require_once __DIR__ . '/../src/Models/Order.php';
-require_once __DIR__ . '/../src/Pricing/PriceCalculator.php';
 require_once __DIR__ . '/../src/Notifications/EmailNotification.php';
 require_once __DIR__ . '/../src/Notifications/SmsNotification.php';
 require_once __DIR__ . '/../src/Notifications/NotificationSender.php';
@@ -31,6 +30,11 @@ require_once __DIR__ . '/../src/Reports/ReportGenerator.php';
 require_once __DIR__ . '/../src/Events/OrderEvents.php';
 require_once __DIR__ . '/../src/Services/OrderService.php';
 require_once __DIR__ . '/../src/Controllers/OrderController.php';
+require_once __DIR__ . '/../src/Pricing/PricingStrategy.php';
+require_once __DIR__ . '/../src/Pricing/PrivatePatientStrategy.php';
+require_once __DIR__ . '/../src/Pricing/InsuranceStrategy.php';
+require_once __DIR__ . '/../src/Pricing/RetiredStrategy.php';
+require_once __DIR__ . '/../src/Pricing/PriceCalculator.php';
 
 /*
  * ✅ FORMA CORRECTA (reemplaza a los 11 require de arriba):
