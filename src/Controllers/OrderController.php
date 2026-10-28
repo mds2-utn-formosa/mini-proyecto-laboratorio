@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ============================================================================
  *  CONTROLADOR DE PEDIDOS
@@ -79,14 +80,17 @@ class OrderController
         require __DIR__ . '/../../views/orders.php';
     }
 
-    /**
-     * ❌ METODO MAL APLICADO: report()
-     *    Usa banderas booleanas ilegibles (ver ReportGenerator).
+     /**
+     * Genera el reporte del día combinando decoradores.
      */
     public function report(): void
     {
-        $generador = new ReportGenerator();
-        echo $generador->generate('Pedidos del dia', true, true, true);
+        $reporte = new BasicReport('Pedidos del dia');
+        $reporte = new DigitalSignatureDecorator($reporte);
+        $reporte = new PdfReportDecorator($reporte);
+        $reporte = new WatermarkDecorator($reporte);
+
+        echo $reporte->generate();
     }
 }
 
