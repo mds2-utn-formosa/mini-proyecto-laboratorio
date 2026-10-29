@@ -62,27 +62,21 @@ class OrderService
         // ---- 3. Persistencia (deberia ser un Repository) ----
         // ❌ new adentro del metodo: no se puede reemplazar por un doble en pruebas
         $order = new Order($id, $paciente, $total, $tipoPaciente);
-        $order->guardar();
+        (new OrderRepository(Connection::obtener()))->save($order);
 
-        // ---- 4. Notificacion (deberia ser una Factory) ----
-        // ❌ MISMO if que ya existe en NotificationSender::enviar()
-        if ($tipoNotificacion === 'email') {
-            $email = new EmailNotification();
-            $email->enviarEmail($destino, 'Pedido creado', "Pedido {$id} por $ {$total}");
-        }
+        // ---- 4. Notificacion ----
+        NotificationFactory::create($tipoNotificacion, $destino)->send("Pedido {$id} por $ {$total}");
 
-        if ($tipoNotificacion === 'sms') {
-            $sms = new SmsNotification();
-            $sms->mandarSms($destino, "Pedido {$id} por $ {$total}");
-        }
+        // ---- 5. Avisos internos ----
+        $eventos = new OrderSubject();
+        $eventos->subscribe(new EmailObserver());
+        $eventos->subscribe(new SmsObserver());
+        $eventos->subscribe(new DashboardObserver());
+        $eventos->notify($order);
 
-        // ---- 5. Avisos internos (deberia ser un Observer) ----
-        $eventos = new OrderEvents();
-        $eventos->pedidoCreado($order);
-
-        // ---- 6. Reporte (deberia ser un Decorator) ----
-        $generador = new ReportGenerator();
-        echo $generador->generate("Pedido {$id}", true, true, false) . '<br>';
+        // ---- 6. Reporte ----
+        $reporte = new PdfReportDecorator(new DigitalSignatureDecorator(new BasicReport("Pedido {$id}")));
+        echo $reporte->generate() . '<br>';
 
         // ---- 7. Presentacion (deberia ser una View) ----
         echo "<p>Pedido {$id} procesado. Total: $ {$total}</p>";
