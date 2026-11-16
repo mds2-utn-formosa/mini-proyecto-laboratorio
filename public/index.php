@@ -19,9 +19,14 @@
  * ============================================================================
  */
 
-// ❌ MAL APLICADO: carga manual. Cada clase nueva obliga a editar este archivo.
-require_once __DIR__ . '/../src/Database/Connection.php';
+// ⚠️ Carga manual pendiente de autoload (deuda de proceso — Unidad 1).
+//    Al agregar estrategias nuevas, este bloque creció.require_once __DIR__ . '/../src/Database/Connection.php';
 require_once __DIR__ . '/../src/Models/Order.php';
+require_once __DIR__ . '/../src/Pricing/PricingStrategy.php';
+require_once __DIR__ . '/../src/Pricing/PrivatePatientStrategy.php';
+require_once __DIR__ . '/../src/Pricing/InsuranceStrategy.php';
+require_once __DIR__ . '/../src/Pricing/RetiredStrategy.php';
+require_once __DIR__ . '/../src/Pricing/PrepaidStrategy.php';
 require_once __DIR__ . '/../src/Pricing/PriceCalculator.php';
 require_once __DIR__ . '/../src/Notifications/EmailNotification.php';
 require_once __DIR__ . '/../src/Notifications/SmsNotification.php';
